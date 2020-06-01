@@ -1871,7 +1871,7 @@ gpgkey={epel_gpg_key}
     packages = ['centos-release']
     packages += args.packages or []
     if args.bootable:
-        packages += ["kernel", "systemd-udev", "binutils"]
+        packages += ["kernel", "systemd", "binutils"]
 
     repos = args.repositories or ["base", "updates", "extras", "centosplus"]
     if args.distribution == Distribution.centos_epel:
