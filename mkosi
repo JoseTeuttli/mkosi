@@ -1852,42 +1852,42 @@ gpgkey={gpg_key}
             extras_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=extras"
             centosplus_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=centosplus"
             epel_url = f"baseurl=http://download.fedoraproject.org/pub/epel/{epel_release}/x86_64"
+        #testing to see if its writing to yum.conf twice
+        # config_file = os.path.join(workspace, "yum.conf")
+        # with open(config_file, "w") as f:
+        #     f.write(f"""\
+        #     [main]
+        #     gpgcheck=1
 
-        config_file = os.path.join(workspace, "yum.conf")
-        with open(config_file, "w") as f:
-            f.write(f"""\
-            [main]
-            gpgcheck=1
+        #     [base]
+        #     name=CentOS-{args.release} - Base
+        #     {release_url}
+        #     gpgkey={gpg_key}
 
-            [base]
-            name=CentOS-{args.release} - Base
-            {release_url}
-            gpgkey={gpg_key}
+        #     [updates]
+        #     name=CentOS-{args.release} - Updates
+        #     {updates_url}
+        #     gpgkey={gpg_key}
 
-            [updates]
-            name=CentOS-{args.release} - Updates
-            {updates_url}
-            gpgkey={gpg_key}
+        #     [extras]
+        #     name=CentOS-{args.release} - Extras
+        #     {extras_url}
+        #     gpgkey={gpg_key}
 
-            [extras]
-            name=CentOS-{args.release} - Extras
-            {extras_url}
-            gpgkey={gpg_key}
+        #     [centosplus]
+        #     name=CentOS-{args.release} - Plus
+        #     {centosplus_url}
+        #     gpgkey={gpg_key}
+        #     """)
+        #     if args.distribution == Distribution.centos_epel:
+        #         f.write(f"""\
 
-            [centosplus]
-            name=CentOS-{args.release} - Plus
-            {centosplus_url}
-            gpgkey={gpg_key}
-            """)
-            if args.distribution == Distribution.centos_epel:
-                f.write(f"""\
+        #     [epel]
+        #     name=Extra Packages for Enterprise Linux 7 - $basearch
+        #     {epel_url}
+        #     gpgkey={epel_gpg_key}
 
-            [epel]
-            name=Extra Packages for Enterprise Linux 7 - $basearch
-            {epel_url}
-            gpgkey={epel_gpg_key}
-
-            """)
+        #     """)
 
     packages = ['centos-release']
     packages += args.packages or []
