@@ -1838,15 +1838,6 @@ name=CentOS-{args.release} - Base
 {release_url}
 gpgkey={gpg_key}
 
-[extras]
-name=CentOS-{args.release} - Extras
-{extras_url}
-gpgkey={gpg_key}
-
-[centosplus]
-name=CentOS-{args.release} - Plus
-{centosplus_url}
-gpgkey={gpg_key}
 """)
     else:
         if args.mirror:
