@@ -1795,10 +1795,13 @@ def invoke_dnf_or_yum(args: CommandLineArguments,
                       repositories: List[str],
                       packages: List[str],
                       config_file: str) -> None:
-    if shutil.which("dnf") is None:
+    if args.distribution==Distribution.centos:
         invoke_yum(args, workspace, repositories, packages, config_file)
     else:
-        invoke_dnf(args, workspace, repositories, packages, config_file)
+        if shutil.which("dnf") is None:
+            invoke_yum(args, workspace, repositories, packages, config_file)
+        else:
+            invoke_dnf(args, workspace, repositories, packages, config_file)
 
 
 @completestep('Installing CentOS')
