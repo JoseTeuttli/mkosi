@@ -1805,7 +1805,7 @@ def invoke_dnf_or_yum(args: CommandLineArguments,
 def install_centos(args: CommandLineArguments, workspace: str, do_run_build_script: bool) -> None:
     masked = disable_kernel_install(args, workspace)
     print("test\n"+args.release+"\ntest\n")
-    if args.release==8:
+    if args.release=="8":
         print("successful test\n")
     epel_release = args.release.split('.')[0]
     gpg_key = f"/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-{args.release}"
