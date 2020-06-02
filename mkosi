@@ -1897,7 +1897,10 @@ gpgkey={gpg_key}
     if args.distribution == Distribution.centos_epel:
         repos += ["epel"]
         packages += ["epel-release"]
-
+    #copying from fedora build code
+    if do_run_build_script:
+        packages += args.build_packages or []
+    #end copy from fedora build code
     invoke_dnf_or_yum(args, workspace,
                       repos,
                       packages,
