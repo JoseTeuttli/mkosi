@@ -1831,7 +1831,6 @@ name=CentOS-{args.release} - Base
 {release_url}
 gpgkey={gpg_key}
 """)
-
     else:
         if args.mirror:
             release_url = f"baseurl={args.mirror}/centos/{args.release}/os/x86_64"
