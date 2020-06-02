@@ -1819,7 +1819,10 @@ def install_centos(args: CommandLineArguments, workspace: str, do_run_build_scri
     else:
         epel_gpg_key = f'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{epel_release}'
     if args.release==8:
-        release_url=f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=BaseOS"
+        if args.mirror:
+            release_url=f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=BaseOS"
+        else:
+            release_url=f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=BaseOS"
         config_file = os.path.join(workspace, "yum.conf")
         with open(config_file, "w") as f:
             f.write(f"""\
