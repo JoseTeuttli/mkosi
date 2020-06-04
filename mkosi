@@ -80,6 +80,9 @@ def print_error(text: str) -> None:
 
 
 def run(cmdline: List[str], execvp: bool = False, **kwargs: Any) -> subprocess.CompletedProcess:
+    print("\n This is the command being run: \n")
+    print(cmdline)
+    print("\n End of command being run\n")
     if 'run' in arg_debug:
         sys.stderr.write('+ ' + ' '.join(shlex.quote(x) for x in cmdline) + '\n')
     if execvp:
@@ -1787,9 +1790,6 @@ def invoke_yum(args: CommandLineArguments,
     cmdline += ['install', *packages]
 
     with mount_api_vfs(args, workspace):
-        print("\n This is the command being run: \n")
-        print(cmdline)
-        print("\n End of command being run\n")
         run(cmdline, check=True)
 
 
