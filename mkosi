@@ -1787,6 +1787,9 @@ def invoke_yum(args: CommandLineArguments,
     cmdline += ['install', *packages]
 
     with mount_api_vfs(args, workspace):
+        print("\n This is the command being run: \n")
+        print(cmdline)
+        print("\n End of command being run\n")
         run(cmdline, check=True)
 
 
