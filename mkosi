@@ -1815,18 +1815,18 @@ def install_centos(args: CommandLineArguments, workspace: str, do_run_build_scri
     gpg_key = f"/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-{args.release}"
     epel_gpg_key = f"/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{epel_release}"
 
-    if args.release=="8":
-        gpg_key=f'https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official'
+    if os.path.exists(gpg_key):
+        gpg_key = f'file://{gpg_key}'
     else:
-        if os.path.exists(gpg_key):
-            gpg_key = f'file://{gpg_key}'
+        if args.release=="8":
+            gpg_key=f'https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official'
         else:
             gpg_key = f'https://www.centos.org/keys/RPM-GPG-KEY-CentOS-{args.release}'
 
-        if os.path.exists(epel_gpg_key):
-            epel_gpg_key = f'file://{epel_gpg_key}'
-        else:
-            epel_gpg_key = f'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{epel_release}'
+    if os.path.exists(epel_gpg_key):
+        epel_gpg_key = f'file://{epel_gpg_key}'
+    else:
+        epel_gpg_key = f'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{epel_release}'
     if args.release=="8":
         if args.mirror:
             appstream_url = f"baseurl={args.mirror}/centos/{args.release}/AppStream/x86_64/os"
@@ -1919,11 +1919,10 @@ gpgkey={epel_gpg_key}
 
     packages = ['centos-release']
     packages += args.packages or []
-    if args.release=="8":
-        if args.bootable:
+    if args.bootable:
+        if args.release=="8":
             packages += ["kernel", "systemd-udev", "binutils"]
-    else:
-        if args.bootable:
+        else:
             packages += ["kernel", "systemd", "binutils"]
     if args.release=="8":
         repos = args.repositories or ["AppStream","BaseOS","extras","centosplus"]
