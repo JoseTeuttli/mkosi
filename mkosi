@@ -3179,8 +3179,8 @@ def install_unified_kernel(args: CommandLineArguments,
 
             if args.output_format.is_squashfs:
                 dracut += ['--add-drivers', 'squashfs']
-
-            dracut += ['--add', 'qemu']
+            #TODO readd the line below removing it for testing purposes
+            #dracut += ['--add', 'qemu']
 
             dracut += [boot_binary]
 
