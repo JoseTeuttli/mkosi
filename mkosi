@@ -2628,7 +2628,7 @@ def install_boot_loader(args: CommandLineArguments, workspace: str, loopdev: Opt
 
     with complete_step("Installing boot loader"):
         if args.esp_partno:
-            if platform.machine()="aarch64":
+            if platform.machine()=="aarch64":
                 shutil.copyfile(os.path.join(workspace, "root", "usr/lib/systemd/boot/efi/systemd-bootaa64.efi"),
                                 os.path.join(workspace, "root", "efi/EFI/systemd/systemd-bootaa64.efi"))
 
