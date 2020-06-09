@@ -3167,13 +3167,14 @@ def install_unified_kernel(args: CommandLineArguments,
             # an aarch64 centOS 8 image from a aarch64 centOS 8 dev host, as it does not
             # have certain files listed below and may be causing errors
             # TODO comment those lines back in after testing is finished.
+            # the removed lines are below this and go between systemd-veritysetup-generator and systemd-debug-generator
+            #("-i",) + ("/usr/bin/systemd-repart",)*2 + #\
+            #("-i",) + ("/usr/lib/systemd/system/systemd-repart.service",)*2 + #\
+            #("-i",) + ("/usr/lib/systemd/system/initrd-root-fs.target.wants/systemd-repart.service",)*2 + #\
             dracut += ("-i",) + ("/usr/lib/systemd/system/systemd-volatile-root.service",)*2 + \
                       ("-i",) + ("/usr/lib/systemd/systemd-volatile-root",)*2 + \
                       ("-i",) + ("/usr/lib/systemd/systemd-veritysetup",)*2 + \
                       ("-i",) + ("/usr/lib/systemd/system-generators/systemd-veritysetup-generator",)*2 + \
-                      #("-i",) + ("/usr/bin/systemd-repart",)*2 + #removed backslash here
-                      #("-i",) + ("/usr/lib/systemd/system/systemd-repart.service",)*2 + #removed backslash here
-                      #("-i",) + ("/usr/lib/systemd/system/initrd-root-fs.target.wants/systemd-repart.service",)*2 + #removed backslash here
                       ("-i",) + ("/usr/lib/systemd/system-generators/systemd-debug-generator",)*2
 
             if args.output_format.is_squashfs:
