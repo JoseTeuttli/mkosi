@@ -1873,8 +1873,8 @@ name=CentOS-{args.release} - Plus
 {centosplus_url}
 gpgkey={gpg_key}
 """)
-        if args.distribution == Distribution.centos_epel:
-            f.write(f"""\
+            if args.distribution == Distribution.centos_epel:
+                f.write(f"""\
 [epel]
 name=Extra Packages for Enterprise Linux {epel_release} - $basearch
 {epel_url}
