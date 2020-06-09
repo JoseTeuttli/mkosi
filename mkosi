@@ -86,7 +86,12 @@ def run(cmdline: List[str], execvp: bool = False, **kwargs: Any) -> subprocess.C
         assert not kwargs
         os.execvp(cmdline[0], cmdline)
     else:
-        return subprocess.run(cmdline, **kwargs)
+        #TODO remove debugging here, should only be return subprocess line after this else
+        try:
+            return subprocess.run(cmdline, **kwargs)
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError("command '{}' return with error (code {}): {}".format(e.cmd, e.returncode, e.output))
+            return subprocess.run(cmdline, **kwargs)
 
 
 def die(message: str, status: int = 1) -> NoReturn:
