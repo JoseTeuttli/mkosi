@@ -3181,8 +3181,8 @@ def install_unified_kernel(args: CommandLineArguments,
                 dracut += ['--add-drivers', 'squashfs']
             #TODO readd the line below removing it for testing purposes
             #dracut += ['--add', 'qemu']
-
-            dracut += [boot_binary]
+            #TODO readd the line below removing it for testing purposes
+            #dracut += [boot_binary]
 
             run_workspace_command(args, workspace, *dracut)
 
