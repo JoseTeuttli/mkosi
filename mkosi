@@ -3146,7 +3146,7 @@ def install_unified_kernel(args: CommandLineArguments,
 
             if platform.machine()=="aarch64":
                 dracut = ["/usr/bin/dracut",
-                      "-v -v -v -v -v", #increase verbose level to try to debug TODO perhaps remove after debugging is complete
+                      "-v", #increase verbose level to try to debug TODO perhaps remove after debugging is complete
                       "--no-hostonly",
                       "--debug" #added for debugging purposes TODO remove after
                       "--uefi",
