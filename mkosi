@@ -87,7 +87,7 @@ def run(cmdline: List[str], execvp: bool = False, **kwargs: Any) -> subprocess.C
         os.execvp(cmdline[0], cmdline)
     else:
         #output=subprocess.run(cmdline, stdout=subprocess.PIPE).stdout
-        subprocess.check_output(cmdline, **kwargs)
+        subprocess.check_output(cmdline)
         #print("\nStart of output from run\n")
         #print(output)
         #print("\nEnd of output from run\n")
