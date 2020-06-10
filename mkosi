@@ -3190,6 +3190,7 @@ def install_unified_kernel(args: CommandLineArguments,
             # '--debug', 
             cmdlineTest = [ "systemd-nspawn",
                             '--quiet',
+                            '--link-journal=try-host'
                             "--directory=" + os.path.join(workspace, "root"),
                             "--uuid=" + args.machine_id,
                             "--machine=mkosi-" + uuid.uuid4().hex,
