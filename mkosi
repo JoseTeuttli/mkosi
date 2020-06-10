@@ -3205,7 +3205,8 @@ def install_unified_kernel(args: CommandLineArguments,
                             '/usr/lib/systemd/system-generators/systemd-debug-generator',
                             '--add-drivers', 'squashfs', '--add', 'qemu',
                             '/efi/EFI/Linux/linux-4.18.0-147.8.1.el8_1.aarch64.efi']
-            subprocess.check_output(cmdlineTest)
+            subprocess.run(cmdlineTest,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            print(result.stdout)
             #TODO end of remove sections
             run_workspace_command(args, workspace, *dracut)
 
