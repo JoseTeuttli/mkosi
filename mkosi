@@ -3179,6 +3179,8 @@ def install_unified_kernel(args: CommandLineArguments,
 
             dracut += [boot_binary]
 
+            #TODO REMOVE THIS BEFORE PUSHING CRITICAL
+            exit()
             run_workspace_command(args, workspace, *dracut)
 
 
