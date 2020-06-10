@@ -3193,7 +3193,7 @@ def install_unified_kernel(args: CommandLineArguments,
                             "--as-pid2",
                             "--register=no",
                             "--bind=" + var_tmp(workspace) + ":/var/tmp",
-                            "--setenv=SYSTEMD_OFFLINE=1"]
+                            "--setenv=SYSTEMD_OFFLINE=1",
                             '--private-network', '--', 
                             '/usr/bin/dracut', '-v -v -v -v','--debug', '--no-hostonly', '--uefi', 
                             '--uefi-stub', 
