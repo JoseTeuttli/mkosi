@@ -3146,8 +3146,9 @@ def install_unified_kernel(args: CommandLineArguments,
 
             if platform.machine()=="aarch64":
                 dracut = ["/usr/bin/dracut",
-                      "-v",
+                      "-v -v -v -v -v", #increase verbose level to try to debug TODO perhaps remove after debugging is complete
                       "--no-hostonly",
+                      "--debug" #added for debugging purposes TODO remove after
                       "--uefi",
                       "--uefi-stub", "/usr/lib/systemd/boot/efi/linuxaa64.efi.stub",
                       "--kver", kver.name,
@@ -3162,28 +3163,21 @@ def install_unified_kernel(args: CommandLineArguments,
                         "--kernel-cmdline", cmdline]
 
             # Temporary fix until dracut includes these in the image anyway
+            dracut += ("-i",) + ("/usr/lib/systemd/system/systemd-volatile-root.service",)*2 + \
+                      ("-i",) + ("/usr/lib/systemd/systemd-volatile-root",)*2 + \
+                      ("-i",) + ("/usr/lib/systemd/systemd-veritysetup",)*2 + \
+                      ("-i",) + ("/usr/lib/systemd/system-generators/systemd-veritysetup-generator",)*2 + \
+                      ("-i",) + ("/usr/bin/systemd-repart",)*2 + \
+                      ("-i",) + ("/usr/lib/systemd/system/systemd-repart.service",)*2 + \
+                      ("-i",) + ("/usr/lib/systemd/system/initrd-root-fs.target.wants/systemd-repart.service",)*2 + \
+                      ("-i",) + ("/usr/lib/systemd/system-generators/systemd-debug-generator",)*2
 
-            # Commenting out certain lines below for testing purposes when trying to build
-            # an aarch64 centOS 8 image from a aarch64 centOS 8 dev host, as it does not
-            # have certain files listed below and may be causing errors
-            # TODO comment those lines back in after testing is finished.
-            # the removed lines are below this and go between systemd-veritysetup-generator and systemd-debug-generator
-            #("-i",) + ("/usr/bin/systemd-repart",)*2 + #\
-            #("-i",) + ("/usr/lib/systemd/system/systemd-repart.service",)*2 + #\
-            #("-i",) + ("/usr/lib/systemd/system/initrd-root-fs.target.wants/systemd-repart.service",)*2 + #\
-            #TODO readd all below commented out for testing purposes
-            #dracut += ("-i",) + ("/usr/lib/systemd/system/systemd-volatile-root.service",)*2 + \
-                      #("-i",) + ("/usr/lib/systemd/systemd-volatile-root",)*2 + \
-                      #("-i",) + ("/usr/lib/systemd/systemd-veritysetup",)*2 + \
-                      #("-i",) + ("/usr/lib/systemd/system-generators/systemd-veritysetup-generator",)*2 + \
-                      #("-i",) + ("/usr/lib/systemd/system-generators/systemd-debug-generator",)*2
-            #TODO readd the lines below removed it for testing purposes
-            #if args.output_format.is_squashfs:
-            #    dracut += ['--add-drivers', 'squashfs']
-            #TODO readd the line below removing it for testing purposes
-            #dracut += ['--add', 'qemu']
-            #TODO readd the line below removing it for testing purposes
-            #dracut += [boot_binary]
+            if args.output_format.is_squashfs:
+                dracut += ['--add-drivers', 'squashfs']
+
+            dracut += ['--add', 'qemu']
+
+            dracut += [boot_binary]
 
             run_workspace_command(args, workspace, *dracut)
 
