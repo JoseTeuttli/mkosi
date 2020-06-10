@@ -3185,10 +3185,16 @@ def install_unified_kernel(args: CommandLineArguments,
             dracut += [boot_binary]
 
             #TODO remove section below it is being used for testing purposes
-            cmdlineTest = [ 'systemd-nspawn', '--quiet', '--directory=/var/tmp/mkosi-glyvbcug/root', '--uuid=85a83614a5b143c89b822328fd13d474', 
-                            '--machine=mkosi-c662c02a021a4b4887b5e8740c712f60', '--as-pid2', '--register=no', 
-                            '--bind=/var/tmp/mkosi-glyvbcug/var-tmp:/var/tmp', 
-                            '--setenv=SYSTEMD_OFFLINE=1', '--private-network', '--', 
+            cmdlineTest = [ "systemd-nspawn",
+                            '--quiet',
+                            "--directory=" + os.path.join(workspace, "root"),
+                            "--uuid=" + args.machine_id,
+                            "--machine=mkosi-" + uuid.uuid4().hex,
+                            "--as-pid2",
+                            "--register=no",
+                            "--bind=" + var_tmp(workspace) + ":/var/tmp",
+                            "--setenv=SYSTEMD_OFFLINE=1"]
+                            '--private-network', '--', 
                             '/usr/bin/dracut', '-v -v -v -v','--debug', '--no-hostonly', '--uefi', 
                             '--uefi-stub', 
                             '/usr/lib/systemd/boot/efi/linuxaa64.efi.stub', '--kver',
