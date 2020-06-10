@@ -86,6 +86,10 @@ def run(cmdline: List[str], execvp: bool = False, **kwargs: Any) -> subprocess.C
         assert not kwargs
         os.execvp(cmdline[0], cmdline)
     else:
+        output = subprocess.check_output(cmdline, **kwarg, shell=True)
+        print("\nStart of output from run\n")
+        print(output)
+        print("\nEnd of output from run\n")
         return subprocess.run(cmdline, **kwargs)
 
 
@@ -3178,7 +3182,7 @@ def install_unified_kernel(args: CommandLineArguments,
             dracut += ['--add', 'qemu']
 
             dracut += [boot_binary]
-            
+
             run_workspace_command(args, workspace, *dracut)
 
 
