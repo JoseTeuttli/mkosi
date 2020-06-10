@@ -86,7 +86,7 @@ def run(cmdline: List[str], execvp: bool = False, **kwargs: Any) -> subprocess.C
         assert not kwargs
         os.execvp(cmdline[0], cmdline)
     else:
-        output=subprocess.run(cmdline, **kwargs, capture_output=True)
+        output=subprocess.run(cmdline, **kwargs)
         print("\nStart of output from run\n")
         print(output)
         print("\nEnd of output from run\n")
