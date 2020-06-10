@@ -86,11 +86,11 @@ def run(cmdline: List[str], execvp: bool = False, **kwargs: Any) -> subprocess.C
         assert not kwargs
         os.execvp(cmdline[0], cmdline)
     else:
-        output = subprocess.check_output(cmdline, shell=True)
+        output=subprocess.run(cmdline, **kwargs, capture_output=True)
         print("\nStart of output from run\n")
         print(output)
         print("\nEnd of output from run\n")
-        return subprocess.run(cmdline, **kwargs)
+        #return subprocess.run(cmdline, **kwargs)
 
 
 def die(message: str, status: int = 1) -> NoReturn:
