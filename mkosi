@@ -3189,6 +3189,7 @@ def install_unified_kernel(args: CommandLineArguments,
             # '--debug', 
             #'--uefi' b"dracut: No '/dev/log' or 'logger' included for syslog logging\ndracut: Architecture 'aarch64' not supported to create a UEFI executable\n"
             #'--uefi-stub', '/usr/lib/systemd/boot/efi/linuxaa64.efi.stub',
+            #'/boot/initramfs-4.18.0-193.6.3.el8_2.aarch64.img'
             cmdlineTest = [ "systemd-nspawn",
                             '--quiet',
                             '--link-journal=no',
@@ -3216,7 +3217,7 @@ def install_unified_kernel(args: CommandLineArguments,
                             '-i', '/usr/lib/systemd/system-generators/systemd-debug-generator',
                             '/usr/lib/systemd/system-generators/systemd-debug-generator',
                             '--add-drivers', 'squashfs', '--add', 'qemu',
-                            '/boot/initramfs-4.18.0-193.6.3.el8_2.aarch64.img']
+                            ]
             result=subprocess.run(cmdlineTest,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             print(result.stdout)
             #TODO end of remove sections
