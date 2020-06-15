@@ -3203,7 +3203,7 @@ def install_unified_kernel(args: CommandLineArguments,
                             '/usr/bin/dracut', '--no-hostonly',  
                             '--uefi-stub', '/usr/lib/systemd/boot/efi/linuxaa64.efi.stub',
                             '--kver',
-                            '4.18.0-147.6.el8.aarch64', '--kernel-cmdline', 'rhgb quiet selinux=0 audit=0 rw',
+                            '4.18.0-193.6.3.el8_2.aarch64' '--kernel-cmdline', 'rhgb quiet selinux=0 audit=0 rw',
                             '--no-early-microcode', 
                             '-i', '/usr/lib/systemd/system/systemd-volatile-root.service',
                             '/usr/lib/systemd/system/systemd-volatile-root.service', 
@@ -3216,7 +3216,7 @@ def install_unified_kernel(args: CommandLineArguments,
                             '-i', '/usr/lib/systemd/system-generators/systemd-debug-generator',
                             '/usr/lib/systemd/system-generators/systemd-debug-generator',
                             '--add-drivers', 'squashfs', '--add', 'qemu',
-                            '/efi/EFI/Linux/linux-4.18.0-147.8.1.el8_1.aarch64.efi']
+                            '/efi/EFI/Linux/linux-4.18.0-147.8.1.el8_2.aarch64.efi']
             result=subprocess.run(cmdlineTest,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             print(result.stdout)
             #TODO end of remove sections
