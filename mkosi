@@ -1953,7 +1953,6 @@ gpgkey={epel_gpg_key}
                       repos,
                       packages,
                       config_file)
-    sys.exit(1)
     reenable_kernel_install(args, workspace, masked)
 
 
