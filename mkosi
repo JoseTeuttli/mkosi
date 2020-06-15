@@ -3220,7 +3220,7 @@ def install_unified_kernel(args: CommandLineArguments,
             result=subprocess.run(cmdlineTest,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             print(result.stdout)
             #TODO end of remove sections
-
+            sys.exit(0)
             run_workspace_command(args, workspace, *dracut)
 
 
