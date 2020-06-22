@@ -1866,17 +1866,17 @@ gpgkey={epel_gpg_key}
 """)
     else:
         if args.mirror:
-            release_url = f"baseurl={args.mirror}/centos/{args.release}/os/x86_64"
-            updates_url = f"baseurl={args.mirror}/centos/{args.release}/updates/x86_64/"
-            extras_url = f"baseurl={args.mirror}/centos/{args.release}/extras/x86_64/"
-            centosplus_url = f"baseurl={args.mirror}/centos/{args.release}/centosplus/x86_64/"
-            epel_url = f"baseurl={args.mirror}/epel/{epel_release}/x86_64/"
+            release_url = f"baseurl={args.mirror}/centos/{args.release}/os/{platform.machine()}"
+            updates_url = f"baseurl={args.mirror}/centos/{args.release}/updates/{platform.machine()}/"
+            extras_url = f"baseurl={args.mirror}/centos/{args.release}/extras/{platform.machine()}/"
+            centosplus_url = f"baseurl={args.mirror}/centos/{args.release}/centosplus/{platform.machine()}/"
+            epel_url = f"baseurl={args.mirror}/epel/{epel_release}/{platform.machine()}/"
         else:
-            release_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=os"
-            updates_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=updates"
-            extras_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=extras"
-            centosplus_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=centosplus"
-            epel_url = f"baseurl=http://download.fedoraproject.org/pub/epel/{epel_release}/x86_64"
+            release_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={platform.machine()}&repo=os"
+            updates_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={platform.machine()}&repo=updates"
+            extras_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={platform.machine()}&repo=extras"
+            centosplus_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={platform.machine()}&repo=centosplus"
+            epel_url = f"baseurl=http://download.fedoraproject.org/pub/epel/{epel_release}/{platform.machine()}"
         config_file = os.path.join(workspace, "yum.conf")
         with open(config_file, "w") as f:
             f.write(f"""\
