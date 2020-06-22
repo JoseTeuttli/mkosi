@@ -28,6 +28,7 @@ import sys
 import tempfile
 import urllib.request
 import uuid
+
 from subprocess import DEVNULL, PIPE
 from typing import (
     IO,
@@ -1805,12 +1806,14 @@ def invoke_dnf_or_yum(args: CommandLineArguments,
 def install_centos(args: CommandLineArguments, workspace: str, do_run_build_script: bool) -> None:
     masked = disable_kernel_install(args, workspace)
 
+    arch = args.architecture or platform.machine()
+
     epel_release = args.release.split('.')[0]
     gpg_key = f"/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-{args.release}"
     epel_gpg_key = f"/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{epel_release}"
 
-    if args.release=="8":
-        gpg_key=f'https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official'
+    if args.release == "8":
+        gpg_key = f'https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official'
     else:
         if os.path.exists(gpg_key):
             gpg_key = f'file://{gpg_key}'
@@ -1821,19 +1824,19 @@ def install_centos(args: CommandLineArguments, workspace: str, do_run_build_scri
             epel_gpg_key = f'file://{epel_gpg_key}'
         else:
             epel_gpg_key = f'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{epel_release}'
-    if args.release=="8":
+    if args.release == "8":
         if args.mirror:
-            appstream_url = f"baseurl={args.mirror}/centos/{args.release}/AppStream/x86_64/os"
-            baseos_url = f"baseurl={args.mirror}/centos/{args.release}/BaseOS/x86_64/os"
-            extras_url = f"baseurl={args.mirror}/centos/{args.release}/extras/x86_64/"
-            centosplus_url = f"baseurl={args.mirror}/centos/{args.release}/centosplus/x86_64/"
-            epel_url = f"baseurl={args.mirror}/epel/{epel_release}/Everything/x86_64/"
+            appstream_url = f"baseurl={args.mirror}/centos/{args.release}/AppStream/{arch}/os"
+            baseos_url = f"baseurl={args.mirror}/centos/{args.release}/BaseOS/{arch}/os"
+            extras_url = f"baseurl={args.mirror}/centos/{args.release}/extras/{arch}/"
+            centosplus_url = f"baseurl={args.mirror}/centos/{args.release}/centosplus/{arch}/"
+            epel_url = f"baseurl={args.mirror}/epel/{epel_release}/Everything/{arch}/"
         else:
-            appstream_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=AppStream"
-            baseos_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=BaseOS"
-            extras_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=extras"
-            centosplus_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=centosplus"
-            epel_url = f"baseurl=http://download.fedoraproject.org/pub/epel/{epel_release}/Everything/x86_64"
+            appstream_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=AppStream"
+            baseos_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=BaseOS"
+            extras_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=extras"
+            centosplus_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=centosplus"
+            epel_url = f"baseurl=http://download.fedoraproject.org/pub/epel/{epel_release}/Everything/{arch}"
         config_file = os.path.join(workspace, "yum.conf")
         with open(config_file, "w") as f:
             f.write(f"""\
@@ -1865,38 +1868,34 @@ gpgkey={epel_gpg_key}
 """)
     else:
         if args.mirror:
-            release_url = f"baseurl={args.mirror}/centos/{args.release}/os/x86_64"
-            updates_url = f"baseurl={args.mirror}/centos/{args.release}/updates/x86_64/"
-            extras_url = f"baseurl={args.mirror}/centos/{args.release}/extras/x86_64/"
-            centosplus_url = f"baseurl={args.mirror}/centos/{args.release}/centosplus/x86_64/"
-            epel_url = f"baseurl={args.mirror}/epel/{epel_release}/x86_64/"
+            release_url = f"baseurl={args.mirror}/centos/{args.release}/os/{arch}"
+            updates_url = f"baseurl={args.mirror}/centos/{args.release}/updates/{arch}/"
+            extras_url = f"baseurl={args.mirror}/centos/{args.release}/extras/{arch}/"
+            centosplus_url = f"baseurl={args.mirror}/centos/{args.release}/centosplus/{arch}/"
+            epel_url = f"baseurl={args.mirror}/epel/{epel_release}/{arch}/"
         else:
-            release_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=os"
-            updates_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=updates"
-            extras_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=extras"
-            centosplus_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch=x86_64&repo=centosplus"
-            epel_url = f"baseurl=http://download.fedoraproject.org/pub/epel/{epel_release}/x86_64"
+            release_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=os"
+            updates_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=updates"
+            extras_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=extras"
+            centosplus_url = f"mirrorlist=http://mirrorlist.centos.org/?release={args.release}&arch={arch}&repo=centosplus"
+            epel_url = f"baseurl=http://download.fedoraproject.org/pub/epel/{epel_release}/{arch}"
         config_file = os.path.join(workspace, "yum.conf")
         with open(config_file, "w") as f:
             f.write(f"""\
 [main]
 gpgcheck=1
-
 [base]
 name=CentOS-{args.release} - Base
 {release_url}
 gpgkey={gpg_key}
-
 [updates]
 name=CentOS-{args.release} - Updates
 {updates_url}
 gpgkey={gpg_key}
-
 [extras]
 name=CentOS-{args.release} - Extras
 {extras_url}
 gpgkey={gpg_key}
-
 [centosplus]
 name=CentOS-{args.release} - Plus
 {centosplus_url}
@@ -1904,7 +1903,6 @@ gpgkey={gpg_key}
 """)
             if args.distribution == Distribution.centos_epel:
                 f.write(f"""\
-
 [epel]
 name=Extra Packages for Enterprise Linux 7 - $basearch
 {epel_url}
@@ -1913,16 +1911,15 @@ gpgkey={epel_gpg_key}
 
     packages = ['centos-release']
     packages += args.packages or []
-    if args.release=="8":
-        if args.bootable:
-            packages += ["kernel", "systemd-udev", "binutils"]
-    else:
-        if args.bootable:
-            packages += ["kernel", "systemd", "binutils"]
-    if args.release=="8":
+    packages += ["kernel", "systemd", "binutils"]
+    if args.release == "8" and args.bootable:
+        packages += ["systemd-udev"]
+            
+    if args.release == "8":
         repos = args.repositories or ["AppStream","BaseOS","extras","centosplus"]
     else:
         repos = args.repositories or ["base", "updates", "extras", "centosplus"]
+
     if args.distribution == Distribution.centos_epel:
         repos += ["epel"]
         packages += ["epel-release"]
@@ -1934,7 +1931,6 @@ gpgkey={epel_gpg_key}
                       repos,
                       packages,
                       config_file)
-
     reenable_kernel_install(args, workspace, masked)
 
 
@@ -2546,7 +2542,7 @@ def install_grub(args: CommandLineArguments, workspace: str, loopdev: str, grub:
 def install_boot_loader_fedora(args: CommandLineArguments, workspace: str, loopdev: str) -> None:
     install_grub(args, workspace, loopdev, "grub2")
 def install_boot_loader_centos(args:CommandLineArguments, workspace: str, loopdev: str) -> None:
-    install_grub(args,workspace,loopdev,"grub2")
+    install_grub(args, workspace, loopdev, "grub2")
 
 def install_boot_loader_arch(args: CommandLineArguments, workspace: str, loopdev: str) -> None:
     if "uefi" in args.boot_protocols:
@@ -2615,11 +2611,18 @@ def install_boot_loader(args: CommandLineArguments, workspace: str, loopdev: Opt
 
     with complete_step("Installing boot loader"):
         if args.esp_partno:
-            shutil.copyfile(os.path.join(workspace, "root", "usr/lib/systemd/boot/efi/systemd-bootx64.efi"),
-                            os.path.join(workspace, "root", "efi/EFI/systemd/systemd-bootx64.efi"))
+            if platform.machine() == "aarch64":
+                shutil.copyfile(os.path.join(workspace, "root", "usr/lib/systemd/boot/efi/systemd-bootaa64.efi"),
+                                os.path.join(workspace, "root", "efi/EFI/systemd/systemd-bootaa64.efi"))
 
-            shutil.copyfile(os.path.join(workspace, "root", "usr/lib/systemd/boot/efi/systemd-bootx64.efi"),
-                            os.path.join(workspace, "root", "efi/EFI/BOOT/bootx64.efi"))
+                shutil.copyfile(os.path.join(workspace, "root", "usr/lib/systemd/boot/efi/systemd-bootaa64.efi"),
+                                os.path.join(workspace, "root", "efi/EFI/BOOT/bootaa64.efi"))
+            else:
+                shutil.copyfile(os.path.join(workspace, "root", "usr/lib/systemd/boot/efi/systemd-bootx64.efi"),
+                                os.path.join(workspace, "root", "efi/EFI/systemd/systemd-bootx64.efi"))
+
+                shutil.copyfile(os.path.join(workspace, "root", "usr/lib/systemd/boot/efi/systemd-bootx64.efi"),
+                                os.path.join(workspace, "root", "efi/EFI/BOOT/bootx64.efi"))
 
         if args.distribution == Distribution.fedora:
             install_boot_loader_fedora(args, workspace, loopdev)
@@ -3124,13 +3127,20 @@ def install_unified_kernel(args: CommandLineArguments,
                 boot_binary += "-" + root_hash
             boot_binary += ".efi"
 
-            dracut = ["/usr/bin/dracut",
-                      "-v",
-                      "--no-hostonly",
-                      "--uefi",
-                      "--uefi-stub", "/usr/lib/systemd/boot/efi/linuxx64.efi.stub",
-                      "--kver", kver.name,
-                      "--kernel-cmdline", cmdline]
+            if platform.machine() == "aarch64":
+                dracut = ["/usr/bin/dracut",
+                          "--no-hostonly",
+                          "--kver", kver.name,
+                          "--kernel-cmdline", cmdline,
+		                  "--no-early-microcode"]
+            else:
+                dracut = ["/usr/bin/dracut",
+                        "-v",
+                        "--no-hostonly",
+                        "--uefi",
+                        "--uefi-stub", "/usr/lib/systemd/boot/efi/linuxx64.efi.stub",
+                        "--kver", kver.name,
+                        "--kernel-cmdline", cmdline]
 
             # Temporary fix until dracut includes these in the image anyway
             dracut += ("-i",) + ("/usr/lib/systemd/system/systemd-volatile-root.service",)*2 + \
@@ -4746,6 +4756,8 @@ def build_image(args: CommandLineArguments,
 
                 if cleanup:
                     clean_package_manager_metadata(workspace.name)
+                if platform.machine() == "aarch64":
+                    install_unified_kernel(args, workspace.name, do_run_build_script, for_cache, None)
                 reset_machine_id(args, workspace.name, do_run_build_script, for_cache)
                 reset_random_seed(args, workspace.name)
                 make_read_only(args, workspace.name, for_cache)
@@ -4762,7 +4774,8 @@ def build_image(args: CommandLineArguments,
             # image anymore.
             with mount_image(args, workspace.name, loopdev,
                              None if args.generated_root() and for_cache else encrypted_root, encrypted_home, encrypted_srv, encrypted_var, encrypted_tmp, root_read_only=True):
-                install_unified_kernel(args, workspace.name, do_run_build_script, for_cache, root_hash)
+                if platform.machine()!="aarch64":
+                    install_unified_kernel(args, workspace.name, do_run_build_script, for_cache, root_hash)
                 secure_boot_sign(args, workspace.name, do_run_build_script, for_cache)
 
     tar = make_tar(args, workspace.name, do_run_build_script, for_cache)
