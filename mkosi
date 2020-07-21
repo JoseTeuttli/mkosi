@@ -1914,7 +1914,8 @@ gpgkey={epel_gpg_key}
     packages += ["kernel", "systemd", "binutils"]
     if args.release == "8" and args.bootable:
         packages += ["systemd-udev"]
-            
+    if platform.machine() == "aarch64":
+        packages += ["grub2", "grub2-tools", "grub2-efi-aa64", "grub2-efi-modules", "nano"]
     if args.release == "8":
         repos = args.repositories or ["AppStream","BaseOS","extras","centosplus"]
     else:
