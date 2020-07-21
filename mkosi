@@ -2532,7 +2532,7 @@ def install_grub(args: CommandLineArguments, workspace: str, loopdev: str, grub:
     if platform.machine() == "aarch64":
         run_workspace_command(
             args, workspace, f"{grub}-install",
-            "--modules=ext2 part_gpt", "--target=arm64-efi", '--removable', '--efi-directory=/efi/', '--bootloader-id=GRUB',
+            "--modules=ext2 part_gpt", "--target=arm64-efi", '--removable', '--efi-directory=/efi/', '--bootloader-id=GRUB', '--boot-directory=/boot/efi/',
             loopdev, nspawn_params=nspawn_params)
     #run_workspace_command(
     #run(['grub2-install', '--modules=ext2 part_gpt', '--target=arm64-efi', '--efi-directory=/efi/ --bootloader-id=GRUB',
@@ -2540,7 +2540,8 @@ def install_grub(args: CommandLineArguments, workspace: str, loopdev: str, grub:
 
     run_workspace_command(
         args, workspace, f"{grub}-mkconfig",
-        f"--output=/boot/{grub}/grub.cfg",
+        f"--output=/boot/efi/{grub}/grub.cfg",
+        #f"--output=/boot/efi/EFI/centos/grub.cfg",
         nspawn_params=nspawn_params)
 
 
@@ -4789,6 +4790,7 @@ def build_image(args: CommandLineArguments,
             # image anymore.
             with mount_image(args, workspace.name, loopdev,
                              None if args.generated_root() and for_cache else encrypted_root, encrypted_home, encrypted_srv, encrypted_var, encrypted_tmp, root_read_only=True):
+                #install_boot_loader(args, workspace.name, loopdev, do_run_build_script, cached)
                 if platform.machine()!="aarch64":
                     install_unified_kernel(args, workspace.name, do_run_build_script, for_cache, root_hash)
                 secure_boot_sign(args, workspace.name, do_run_build_script, for_cache)
