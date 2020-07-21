@@ -2544,6 +2544,20 @@ def install_grub(args: CommandLineArguments, workspace: str, loopdev: str, grub:
         #f"--output=/boot/efi/EFI/centos/grub.cfg",
         nspawn_params=nspawn_params)
 
+def configure_grub(args: CommandLineArguments, workspace: str, loopdev: str, grub: str) -> None:
+    nspawn_params = [
+        "--bind-ro=/dev",
+        "--property=DeviceAllow=" + loopdev,
+        #"--console=pipe",
+    ]
+    if args.root_partno is not None:
+        nspawn_params += ["--property=DeviceAllow=" + partition(loopdev, args.root_partno)]
+    run_workspace_command(
+        args, workspace, f"{grub}-mkconfig",
+        f"--output=/boot/efi/{grub}/grub.cfg",
+        #f"--output=/boot/efi/EFI/centos/grub.cfg",
+        nspawn_params=nspawn_params)
+
 
 def install_boot_loader_fedora(args: CommandLineArguments, workspace: str, loopdev: str) -> None:
     install_grub(args, workspace, loopdev, "grub2")
@@ -4791,6 +4805,7 @@ def build_image(args: CommandLineArguments,
             with mount_image(args, workspace.name, loopdev,
                              None if args.generated_root() and for_cache else encrypted_root, encrypted_home, encrypted_srv, encrypted_var, encrypted_tmp, root_read_only=True):
                 #install_boot_loader(args, workspace.name, loopdev, do_run_build_script, cached)
+                #configure_grub(args, workspace.name, loopdev, "grub2")
                 if platform.machine()!="aarch64":
                     install_unified_kernel(args, workspace.name, do_run_build_script, for_cache, root_hash)
                 secure_boot_sign(args, workspace.name, do_run_build_script, for_cache)
